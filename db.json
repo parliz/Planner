@@ -1,0 +1,30 @@
+{
+  "user": {
+    "id": "12345",
+    "name": "Марков Альберт",
+    "shortName": "Альберт",
+    "email": "emailcom@mail.com",
+    "company": "OneFour Company",
+    "phone": "+996 704 011 823",
+    "telegram": "@inter_comp",
+    "address": "г. Бишкек, пр-кт Победы, 91",
+    "firstAgreementDate": "16.11.2020",
+    "firstAgreement": "№0000009-1",
+    "currentAgreements": [
+      {
+        "agreement": "№0000189-3",
+        "date": "01.01.2022",
+        "isLongTerm": true
+      },
+      {
+        "agreement": "№0000199-3",
+        "date": "10.08.2022",
+        "isLongTerm": false
+      }
+    ],
+    "currentAgreement": "№0000189-3",
+    "currentAgreementDate": "01.01.2022",
+    "language": "ru",
+    "agreeToDuplicateNotifications": false
+  }
+}
