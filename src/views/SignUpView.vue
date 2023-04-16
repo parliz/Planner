@@ -1,30 +1,20 @@
 <template>
   <div class="login-page">
     <div class="login-form">
-      <h3>{{ $t('login.label.authorization') }}</h3>
+      <h3>{{ $t("login.label.registration") }}</h3>
       <div class="login-content">
         <form>
+          <b-field :label="$t('login.label.email')">
+            <b-input size="is-small" :placeholder="$t('login.label.email').toLowerCase()" v-model="email"></b-input>
+          </b-field>
           <b-field :label="$t('login.label.login')">
-            <b-input
-              size="is-small"
-              :placeholder="$t('login.label.login').toLowerCase()"
-              v-model="login"
-            ></b-input>
+            <b-input size="is-small" :placeholder="$t('login.label.login').toLowerCase()" v-model="login"></b-input>
           </b-field>
           <b-field :label="$t('login.label.password')">
-            <b-input
-              v-model="password"
-              type="password"
-              size="is-small"
-              :placeholder="$t('login.label.password').toLowerCase()"
-              class="customInput"
-              password-reveal
-            ></b-input>
+            <b-input v-model="password" type="password" size="is-small" :placeholder="$t('login.label.password').toLowerCase()" class="customInput" password-reveal></b-input>
           </b-field>
         </form>
-        <b-button type="is-warning is-small" inverted @click="onLoginClick">{{
-          $t("login.btn.enter")
-        }}</b-button>
+        <b-button type="is-warning is-small" inverted @click="onSignUpClick">{{ $t("signip.btn.enter") }}</b-button>
       </div>
     </div>
   </div>
@@ -37,39 +27,29 @@ export default {
     return {
       login: "",
       password: "",
+      email: ""
     };
   },
   methods: {
-    onLoginClick() {
-      const user = {
-        "userEmail": this.email,
-        "userPassword": this.password
-      }
-      MockService.getUser(user).then((oResponse) => {
-        console.log(oResponse);
+    onSignUpClick() {
+      const newUser = {
+        login: this.login,
+        email: this.email,
+        password: this.email
+      };
+      MockService.setUser(newUser).then((oResponse) => {
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: oResponse.data,
+          type: "is-success"
+        });
+
         this.$router.push({
-          name: "/"
+          name: "login"
         });
       });
-      // this.$store
-      //   .dispatch("secure/login", {
-      //     login: this.login,
-      //     password: this.password,
-      //   })
-      //   .then(() => {
-      //     this.$router.push({
-      //       name: "home",
-      //     });
-      //   })
-      //   .catch((sMessage) => {
-      //     this.$buefy.toast.open({
-      //       duration: 5000,
-      //       message: sMessage,
-      //       type: "is-warning",
-      //     });
-      //   });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -92,7 +72,7 @@ export default {
     width: 20rem;
     height: 25rem;
     box-shadow: 0px 0px 4px #2c3e5020;
-    border-radius: 30px;;
+    border-radius: 30px;
     background-color: #00d7d9;
     margin: 0 auto;
     display: flex;

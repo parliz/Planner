@@ -6,7 +6,7 @@ import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
 import '@/assets/main.scss';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import i18n from '@/i18n';
 import formatter from '@/mixins/formatter';
@@ -14,9 +14,10 @@ import authActions from '@/mixins/authActions';
 import "vue2-datepicker/index.css";
 import 'vue2-datepicker/locale/ru';
 import '@/assets/datepicker.scss';
+import './registerServiceWorker'
 //temporary service DB
 
-library.add(faHouse);
+library.add(faHouse, faTrash, faPen);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.config.productionTip = false;

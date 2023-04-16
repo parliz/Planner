@@ -17,9 +17,7 @@ components: { MainCalendar }
   
   <style lang="scss" scoped>
   .full-calendar{
-    margin-left: 50%;
-    width: 45%;
-    height: 50%;
+    width: 100%;
   }
 </style>
   

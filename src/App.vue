@@ -1,28 +1,31 @@
 <template>
   <div id="app">
-    <desktop-nav-bar class="navBar"/>
-    <div class="page-сontent">
-      <div class="view">
-        <router-view />
+    <the-header />
+    <div>
+      <nav-bar class="navBar"/>
+      <div class="page-сontent">
+        <div class="view">
+          <router-view />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
 import MockService from "@/services/MockService";
-import DesktopNavBar from "@/components/DesktopNavBar.vue"
-import { mapGetters } from 'vuex';
+import NavBar from "@/components/nav/NavBar.vue";
+import TheHeader from "@/components/TheHeader.vue";
+import { mapGetters } from "vuex";
 
 export default {
   computed: {
     currentRoute() {
       return this.$t(this.$route.name);
     },
-     ...mapGetters({
-      isLoggedIn: 'secure/isLoggedIn',
-    }),
+    ...mapGetters({
+      isLoggedIn: "secure/isLoggedIn"
+    })
   },
   created() {
     // this.changeHeaderParam();
@@ -33,7 +36,7 @@ export default {
   watch: {
     $route() {
       // this.changeHeaderParam();
-    },
+    }
   },
   methods: {
     // changeHeaderParam() {
@@ -41,15 +44,16 @@ export default {
     // }
   },
   components: {
-    DesktopNavBar
-  },
+    TheHeader,
+    NavBar
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 #app {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .navBar {
   width: 15rem;
@@ -61,3 +65,6 @@ export default {
 }*/
 </style>
 
+
+
+<!-- this.$moment(this.rangePicker[0]).format("YYYY-MM-DD[T]HH:mm:ss.SSS[Z]"); -->

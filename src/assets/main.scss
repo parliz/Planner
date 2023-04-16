@@ -2,8 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap');
 @import "~bulma/sass/utilities/_all";
 
+// салатовый #9fff3e
+// голубой #00d7d9
+// оранжевый #ffa133
 
-$primary: #2c3e50;
+$primary: #C1C1C1;
 $primary-light: findLightColor($primary);
 $primary-dark: findDarkColor($primary);
 $primary-invert: findColorInvert($primary);
@@ -65,4 +68,29 @@ body {
 
 .page-сontent {
     width: 100%;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+h2 {
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 0.825rem;
+    font-weight: normal;
+}
+
+h4 {
+    font-size: 0.725rem;
+    font-weight: normal;
+}
+
+p {
+    font-size: 0.725rem;
+    color: black;
 }

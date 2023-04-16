@@ -5,7 +5,7 @@ let apiClient;
 
 if (bRunDBMock) {
   apiClient = axios.create({
-    baseURL: 'http://localhost:4004',
+    baseURL: 'http://localhost:8080',
     withCredentials: false,
 
   });
@@ -22,21 +22,37 @@ let oTempData = {
   },
   "tasks": [
     {
-      "id": "1",
-      "date": "12.02.2023",
-      "timeStart": "",
+      "taskId": "1",
+      "taskDate": "12.02.2023",
+      "timeStart": "8.30",
       "timeEnd": "",
       "taskText": "Выучить 20 англ слов",
-      "isTaskDone": false
+      "taskDone": false
+    },
+    {
+      "taskId": "2",
+      "taskDate": "12.02.2023",
+      "timeStart": "",
+      "timeEnd": "",
+      "taskText": "Выгулить собаку",
+      "taskDone": true
+    },
+    {
+      "taskId": "3",
+      "taskDate": "12.02.2023",
+      "timeStart": "",
+      "timeEnd": "",
+      "taskText": "Помыть посуду",
+      "taskDone": true
     },
 
   ]
 };
 
 export default {
-  getUser() {
+  setUser(newUser) {
     if (bRunDBMock) {
-      return apiClient.get("/user");
+      return apiClient.post("/api/user", newUser);
     }
     return new Promise((resolve) => {
       resolve({
@@ -44,143 +60,34 @@ export default {
       });
     });
   },
-  getShipments() {
+  getUser(user) {
+    if (bRunDBMock) {
+      return apiClient.get("/api/user", user);
+    }
+    return new Promise((resolve) => {
+      resolve({
+        data: oTempData["user"]
+      });
+    });
+  },
+  getTasksByDay(userId, day) {
     if (bRunDBMock) {
       return apiClient.get("/shipments");
     }
     return new Promise((resolve) => {
       resolve({
-        data: oTempData["shipments"]
+        data: oTempData["tasks"]
       });
     });
   },
-  getBalance() {
+  setNewTask(task) {
     if (bRunDBMock) {
-      return apiClient.get("/balance");
+      return apiClient.post("/tasks/addnNewTask", task);
     }
     return new Promise((resolve) => {
       resolve({
-        data: oTempData["balance"]
+        data: oTempData["tasks"]
       });
     });
-  },
-  getShipment(sId) {
-    if (bRunDBMock) {
-      return apiClient.get("/shipments/" + sId);
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["shipments"].find(oTempRow => oTempRow.id === sId)
-      });
-    });
-  },
-  getShipmentHistory(sId) {
-    if (bRunDBMock) {
-      return apiClient.get("/shipmentsHistory/" + sId);
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["shipmentsHistory"].find(oTempRow => oTempRow.id === sId)
-      });
-    });
-  },
-  getUnpaidBills() {
-    if (bRunDBMock) {
-      return apiClient.get("/unpaidBills");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["unpaidBills"]
-      });
-    });
-  },
-  getPaymentHistory() {
-    if (bRunDBMock) {
-      return apiClient.get("/paymentHistory");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["paymentHistory"]
-      });
-    });
-  },
-  getShipmentDocuments(sId) {
-    if (bRunDBMock) {
-      return apiClient.get("/shipmentDocuments/" + sId);
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["shipmentDocuments"].find(oTempRow => oTempRow.id === sId)
-      });
-    });
-  },
-  getRequests() {
-    if (bRunDBMock) {
-      return apiClient.get("/conversations");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["conversations"]
-      });
-    });
-  },
-  getRequest(sId) {
-    if (bRunDBMock) {
-      return apiClient.get("/conversations/" + sId);
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["conversations"].find(oTempRow => oTempRow.id === sId)
-      });
-    });
-  },
-  sendMessage() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve()
-      }, 5000)
-    });
-  },
-  createRequest(oRequest) {
-    if (bRunDBMock) {
-      return apiClient.post("/conversations", oRequest);
-    }
-    return new Promise((resolve) => {
-      oTempData["conversations"].push(oRequest);
-      resolve({
-        data: oRequest
-      });
-    });
-
-  },
-  getBalanceData() {
-    if (bRunDBMock) {
-      return apiClient.get("/balanceReportData");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["balanceReportData"]
-      });
-    });
-  },
-  getClientBalanceReportData() {
-    if (bRunDBMock) {
-      return apiClient.get("/clientBalanceReportData");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["clientBalanceReportData"]
-      });
-    });
-  },
-  getPaymentPeriodData() {
-    if (bRunDBMock) {
-      return apiClient.get("/paymentPeriodData");
-    }
-    return new Promise((resolve) => {
-      resolve({
-        data: oTempData["paymentPeriodData"]
-      });
-    });
-  },
+  }
 }

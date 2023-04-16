@@ -59,7 +59,6 @@
       flex:1;
     }
     .header-center{
-      flex:3;
       text-align:center;
       .title{
         margin: 0 10px;
