@@ -8,7 +8,6 @@
         <div slot="header-left">
           <slot name="fc-header-left"> </slot>
         </div>
-
         <div slot="header-right">
           <slot name="fc-header-right"> </slot>
         </div>
@@ -121,10 +120,11 @@ export default {
 }
 .main-calendar {
   margin-right: 0rem;
+  margin-top: 6rem;
   width: 50%;
   align-items: flex-end;
   justify-content: flex-end;
-}}
+}
 .comp-full-calendar {
   // font-family: "elvetica neue", tahoma, "hiragino sans gb";
   padding: 20px;
@@ -285,5 +285,6 @@ export default {
       }
     }
   }
+}
 }
 </style>

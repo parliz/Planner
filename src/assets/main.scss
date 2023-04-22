@@ -94,3 +94,65 @@ p {
     font-size: 0.725rem;
     color: black;
 }
+
+.login-page {
+    z-index: 8999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: #fff;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  
+    .login-form {
+      padding: 1.5rem;
+      width: 20rem;
+      height: max-content;
+      box-shadow: 0px 0px 4px #2c3e5020;
+      border-radius: 30px;
+      background-color: #00d7d9;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+  
+      label {
+        font-size: 0.725rem;
+        color: #fff;
+      }
+  
+      button {
+        margin-top: 0.5rem;
+      }
+  
+      img {
+        max-width: 75%;
+        margin-top: 2rem;
+      }
+  
+      .login-content {
+        width: 100%;
+        display: flex;
+        gap: 2rem;
+        flex-direction: column;
+  
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .login-page {
+      .login-form {
+        height: 100vh;
+        width: 100%;
+      }
+    }
+  }

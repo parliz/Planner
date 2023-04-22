@@ -12,7 +12,7 @@
   "login.label.password": "Пароль",
   "login.label.email": "Почта",
   "login.btn.enter": "Войти",
-  "signip.btn.enter": "Зарегистрироваться",
+  "signup.btn.enter": "Зарегистрироваться",
   "calendar.task.addTask": "ДОБАВИТЬ ЗАДАЧУ",
   "calendar.task.taskList": "СПИСОК ЗАДАЧ",
   "calendar.task.closeTasks": "ЗАВЕРШЕННЫЕ ЗАДАЧИ",

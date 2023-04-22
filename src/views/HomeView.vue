@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import MockService from "@/services/MockService";
 export default {
   data() {
     return {
@@ -12,9 +13,6 @@ export default {
   },
 
   created() {
-    // MockService.getShipments().then((oResponse) =>
-    //   this.pageCounters.shipments = oResponse.data.length.toString();
-    // });
     // MockService.getRequests().then((oResponse) => {
     //   this.pageCounters.requests = oResponse.data.length.toString();
     // });

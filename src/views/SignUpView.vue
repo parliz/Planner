@@ -14,7 +14,8 @@
             <b-input v-model="password" type="password" size="is-small" :placeholder="$t('login.label.password').toLowerCase()" class="customInput" password-reveal></b-input>
           </b-field>
         </form>
-        <b-button type="is-warning is-small" inverted @click="onSignUpClick">{{ $t("signip.btn.enter") }}</b-button>
+        <b-button type="is-warning is-small" inverted @click="onSignUpClick">{{ $t("signup.btn.enter") }}</b-button>
+        <b-button type="is-success is-small" inverted @click="onLoginClick">{{ $t("login.btn.enter") }}</b-button>
       </div>
     </div>
   </div>
@@ -27,92 +28,72 @@ export default {
     return {
       login: "",
       password: "",
-      email: ""
+      email: "",
+      isEmailValid: true,
+      isLoginValid: true,
+      isPasswordValid: true
     };
   },
   methods: {
     onSignUpClick() {
-      const newUser = {
-        login: this.login,
-        email: this.email,
-        password: this.email
-      };
-      MockService.setUser(newUser).then((oResponse) => {
+      this.isEmailValid = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(this.email);
+      this.isLoginValid = /^[a-zA-Z](.[a-zA-Z0-9_-]*)$/.test(this.login);
+      this.isPasswordValid = this.password.length > 4 && this.password.length < 10;
+      if (!this.isPasswordValid) {
         this.$buefy.toast.open({
           duration: 5000,
-          message: oResponse.data,
-          type: "is-success"
+          message: "Длина пароля должна быть не менее 4 символов и не более 10",
+          type: "is-warning"
         });
-
-        this.$router.push({
-          name: "login"
+      }
+      if (!this.isLoginValid) {
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: "Логин не должен быть пустым и должен содержать латинские буквы и цифры",
+          type: "is-warning"
         });
+      }
+      if (!this.isEmailValid) {
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: "Введите корректную почту",
+          type: "is-warning"
+        });
+      }
+      if (this.isEmailValid && this.isLoginValid && this.isPasswordValid) {
+        const newUser = {
+          login: this.login,
+          email: this.email,
+          password: this.password,
+          language: "RU"
+        };
+        MockService.setUser(newUser)
+          .then((oResponse) => {
+            this.$buefy.toast.open({
+              duration: 5000,
+              message: oResponse.data.message,
+              type: "is-success"
+            });
+            this.$router.push({
+              name: "login"
+            });
+          })
+          .catch((oError) => {
+            this.$buefy.toast.open({
+              duration: 5000,
+              message: oError.response.data.message,
+              type: "is-warning"
+            });
+          });
+      }
+    },
+    onLoginClick() {
+      this.$router.push({
+        name: "login"
       });
     }
   }
 };
 </script>
 
-<style lang="scss">
-.login-page {
-  z-index: 8999;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100%;
-  background-color: #fff;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .login-form {
-    padding: 1.5rem;
-    width: 20rem;
-    height: 25rem;
-    box-shadow: 0px 0px 4px #2c3e5020;
-    border-radius: 30px;
-    background-color: #00d7d9;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-
-    label {
-      font-size: 0.725rem;
-      color: #fff;
-    }
-
-    button {
-      margin-top: 0.5rem;
-    }
-
-    img {
-      max-width: 75%;
-      margin-top: 2rem;
-    }
-
-    .login-content {
-      width: 100%;
-      display: flex;
-      gap: 2rem;
-      flex-direction: column;
-
-      button {
-        width: 100%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .login-page {
-    .login-form {
-      height: 100vh;
-      width: 100%;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

@@ -30,7 +30,6 @@
               <div class="footer-icon">
                 <font-awesome-icon icon="fa-solid fa-circle-question" class="fasIcon" />
               </div>
-              <h2>{{ $t("title.writeToDev") }}</h2>
             </a>
  
             <a @click="logout">

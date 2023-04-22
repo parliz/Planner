@@ -1,9 +1,9 @@
 
 <template>
   <div class="user-info">
-    <span class="bold">{{ user?.userEmail }}</span>
-    <span>{{ user?.userOffice }}</span>
-    <span>{{ user?.userAddress }}</span>
+    <span class="bold">{{ user?.userLogin }}</span>
+    <!-- <span>{{ user?.userOffice }}</span>
+    <span>{{ user?.userAddress }}</span> -->
   </div>
 </template>
 
