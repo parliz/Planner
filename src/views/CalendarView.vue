@@ -1,10 +1,9 @@
 <template>
   <div class="calendar-page">
     <div class="tasks">
-      <create-task class="task-create" :selectedDay="selectedDay" @createTask="createTask"/>
-      <day-tasks ></day-tasks>
+      <create-task class="task-create" :selectedDay="taskDay" @createTask="createTask"/>
+      <day-tasks :taskList="taskList" @updateTasks="getTaskListByDay"></day-tasks>
     </div>
-      <!-- <b-button class="button-test" @click="sendRequest">отправить запрос на таску</b-button> -->
     <div class="full-calendar">
       <main-calendar @selectDay="selectDay"></main-calendar>
     </div>
@@ -18,12 +17,12 @@ import MockService from "@/services/MockService";
 import CreateTask from "@/components/calendar/CreateTask.vue";
 import DayTasks from "@/components/calendar/DayTasks.vue";
 import MainCalendar from "@/components/calendar/MainCalendar.vue";
-import moment from "moment";
 export default {
   components: { MainCalendar, CreateTask, DayTasks },
   data() {
     return {
-      selectedDay: this.$moment().format("DD.MM"),
+      taskDay: this.$moment().format("DD.MM"),
+      selectedDay: this.$moment().format("YYYY-MM-DD"),
       taskList: []
     };
   },
@@ -32,13 +31,16 @@ export default {
   },
   methods: {
     getTaskListByDay() {
-      MockService.getTasksByDay(this.$moment(this.selectedDay).format("YYYY-MM-DD"))
+      const taskDay = this.$moment(this.selectedDay).format("YYYY-MM-DD");
+      MockService.getTasksByDay(taskDay)
       .then((oResponse) => {
-        this.taskList = oResponse;
+        this.taskList = oResponse.data;
       })
     },
     selectDay(day) {
-      this.selectedDay = this.$moment(day).format("DD.MM");
+      this.selectedDay = day;
+      this.taskDay = this.$moment(day).format("DD.MM")
+      this.getTaskListByDay();
     },
     createTask(taskText) {
       let newTask = {
@@ -51,6 +53,14 @@ export default {
           duration: 5000,
           message: "Задача успешно добавлена",
           type: "is-success"
+        });
+        this.getTaskListByDay();
+        })
+        .catch(() => {
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: "Возникла ошибка",
+          type: "is-warning"
         });
         })
         .finally(() => {
@@ -76,6 +86,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    gap: 2rem;
     
   .task-create {
     width: 20rem;

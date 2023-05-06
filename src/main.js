@@ -6,7 +6,7 @@ import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
 import '@/assets/main.scss';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faTrash, faPen, faFloppyDisk, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import i18n from '@/i18n';
 import formatter from '@/mixins/formatter';
@@ -22,7 +22,7 @@ Moment.locale('ru');
 Vue.prototype.$moment = Moment;
 //temporary service DB
 
-library.add(faHouse, faTrash, faPen);
+library.add(faHouse, faTrash, faPen, faFloppyDisk, faXmark);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 const token = localStorage.getItem('token');

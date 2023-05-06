@@ -1,33 +1,40 @@
 <template>
-  <div>
-    <div class="task-container">
-
-      <div class="main-task-list">
-        <label>{{ $t("calendar.task.taskList") }}</label>
+  <div class="task-container">
+    <div class="main-task-list">
+      <label style="display: flex; justify-content: center">{{ $t("calendar.task.taskList") }}</label>
+      <div class="day-tasks">
         <div v-for="task of taskList" :key="task.taskId">
-          <div v-if="!task.taskDone" class="task">
-            <b-checkbox v-model="task.taskDone"></b-checkbox>
-            <label>{{ task.taskText }}</label>
+          <div class="task" v-if="!task.isTaskDone">
+            <b-checkbox :value="task.isTaskDone" @input="onTaskDoneChange(task.taskId, task.isTaskDone)"></b-checkbox>
+            <b-input size="is-small" v-if="editTaskId === task.taskId" v-model="editTaskText"></b-input>
+            <label v-else style="text-align: center">{{ task.taskComment }}</label>
+
             <div class="task-btn">
-                <b-button size="is-small" icon-right="fa-pen" />
-                <b-button size="is-small" icon-right="fa-trash" />
+              <b-button v-if="isEditMode && editTaskId === task.taskId" size="is-small" icon-right="fa-floppy-disk" @click="saveMode(task.taskId)" />
+              <b-button v-if="isEditMode && editTaskId === task.taskId" size="is-small" icon-right="fa-xmark" @click="cancelEdit(task.taskId)" />
+              <b-button v-if="!isEditMode || editTaskId !== task.taskId" size="is-small" icon-right="fa-pen" @click="editMode(task.taskId, task.taskComment)" />
+              <b-button v-if="!isEditMode || editTaskId !== task.taskId" size="is-small" icon-right="fa-trash" @click="deleteTask(task.taskId)" />
             </div>
-            
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="line"></div>
+    <div class="line"></div>
 
-      <div class="close-task">
-        <label>{{ $t("calendar.task.closeTasks") }}</label>
+    <div class="main-task-list">
+      <label style="display: flex; justify-content: center">{{ $t("calendar.task.closeTasks") }}</label>
+      <div class="day-tasks">
         <div v-for="task of taskList" :key="task.taskId">
-          <div v-if="task.taskDone" class="task">
-            <b-checkbox v-model="task.taskDone"></b-checkbox>
-            <label>{{ task.taskText }}</label>
+          <div class="task" v-if="task.isTaskDone">
+            <b-checkbox :value="task.isTaskDone" @input="onTaskDoneChange(task.taskId, task.isTaskDone)"></b-checkbox>
+            <b-input size="is-small" v-if="editTaskId === task.taskId" v-model="editTaskText"></b-input>
+            <label v-else style="text-align: center">{{ task.taskComment }}</label>
             <div class="task-btn">
-                <b-button size="is-small" icon-right="fa-pen" />
-                <b-button size="is-small" icon-right="fa-trash" />
+              <b-button v-if="isEditMode && editTaskId === task.taskId" size="is-small" icon-right="fa-floppy-disk" @click="saveMode(task.taskId)" />
+              <b-button v-if="isEditMode && editTaskId === task.taskId" size="is-small" icon-right="fa-xmark" @click="cancelEdit(task.taskId)" />
+              <b-button v-if="!isEditMode || editTaskId !== task.taskId" size="is-small" icon-right="fa-pen" @click="editMode(task.taskId, task.taskComment)" />
+              <b-button v-if="!isEditMode || editTaskId !== task.taskId" size="is-small" icon-right="fa-trash" @click="deleteTask(task.taskId)" />
             </div>
           </div>
         </div>
@@ -46,17 +53,67 @@ export default {
   },
   data() {
     return {
-      newTask: ""
+      newTask: "",
+      editTaskText: "",
+      isEditMode: false,
+      editTaskId: null
     };
   },
   methods: {
-    addTask() {
-      MockService.setNewTask(this.newTask)
-      .then(() => {
-        // this.$emit("selectDay", oResponse.data);
+    onTaskDoneChange(taskId, isTaskDone) {
+      MockService.taskUpdateFromCalendar(taskId, { isTaskDone: !isTaskDone })
+        .then(() => {
+          this.$emit("updateTasks");
+        })
+        .finally(() => {});
+    },
+    editMode(editTaskId, editTaskComment) {
+      this.isEditMode = true;
+      this.editTaskId = editTaskId;
+      this.editTaskText = editTaskComment;
+    },
+    saveMode(editTaskId) {
+      MockService.taskUpdateFromCalendar(editTaskId, { taskComment: this.editTaskText })
+        .then(() => {
+          this.$emit("updateTasks");
+        })
+        .catch(() => {
+          this.$buefy.toast.open({
+            duration: 5000,
+            message: "Возникла ошибка",
+            type: "is-warning"
+          });
+        })
+        .finally(() => {
+          this.isEditMode = false;
+          this.editTaskId = null;
+          this.editTaskText = "";
+        });
+    },
+    cancelEdit() {
+      this.isEditMode = false;
+      this.editTaskId = null;
+      this.editTaskText = "";
+    },
+    deleteTask(taskId) {
+      MockService.deleteTaskFromCalendar(taskId)
+        .then(() => {
+          this.$buefy.toast.open({
+            duration: 5000,
+            message: "Задача успешно удалена",
+            type: "is-success"
+          });
+        })
+        .catch((oError) => {
+          this.$buefy.toast.open({
+            duration: 5000,
+            message: "Возникла ошибка",
+            type: "is-warning"
+          });
         })
         .finally(() => {
           this.newTask = "";
+          this.$emit("updateTasks");
         });
     }
   },
@@ -65,21 +122,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.task-container {
-  border: 2px solid #000000;
-  border-radius: 15px;
-}
-.add-task-content {
-  display: flex;
-}
 button:hover {
   color: #000000;
   background: #ffffff;
 }
 
-.task{
+.day-tasks {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  .task {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    .task-btn {
+      display: flex;
+      gap: 0.2rem;
+    }
+  }
+}
+.task {
+  display: flex;
+  flex-direction: row;
 }
 .line {
   border-bottom: 1px solid pink; /* Параметры линии */
