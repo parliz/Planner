@@ -12,7 +12,6 @@ export default new Vuex.Store({
   },
   state: {
     user: {},
-    userToken: "",
     headerParams: {
       title: "",
       isNavBack: true,      
@@ -22,7 +21,8 @@ export default new Vuex.Store({
       Success: "success",
       Error: "error",
       Warning: "warning",
-    }
+    },
+    currentDayFromMainCalendar: null
   },
   getters: {
   },

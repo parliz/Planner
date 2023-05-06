@@ -14,11 +14,22 @@ import authActions from '@/mixins/authActions';
 import "vue2-datepicker/index.css";
 import 'vue2-datepicker/locale/ru';
 import '@/assets/datepicker.scss';
-import './registerServiceWorker'
+import './registerServiceWorker';
+import ApiService from "@/services/ApiService";
+import Moment from 'moment';
+import './registerServiceWorker';
+Moment.locale('ru');
+Vue.prototype.$moment = Moment;
 //temporary service DB
 
 library.add(faHouse, faTrash, faPen);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+const token = localStorage.getItem('token');
+if (token) {
+  ApiService.defaults.headers.common['Authorization'] = token;
+}
+
 
 Vue.config.productionTip = false;
 Vue.use(Buefy, {

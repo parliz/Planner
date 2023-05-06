@@ -1,21 +1,9 @@
 import axios from "axios";
-import { mapState } from 'vuex'
 
-const bRunDBMock = true;
-// let AccessToken = this.$store.state.userToken;
-let accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2ODIxNzYxNDIsImV4cCI6MTY4MjI2MjU0Mn0.bNVuddcyAdw9nzA-BlvwEp8MdCC8rRKnqy2tNfS4ja8";
-let apiClient;
+import ApiService from "@/services/ApiService";
 
-if (bRunDBMock) {
-  apiClient = axios.create({
-    baseURL: 'http://localhost:5000',
-    withCredentials: false,
-    headers: {
-      Accept: '*/*',
-      Authorization: "Bearer "+ accessToken
-    }
-  });
-}
+
+
 
 let oTempData = {
   "user": {
@@ -57,21 +45,18 @@ let oTempData = {
 
 export default {
   setUser(newUser) {
-    return apiClient.post("/api/user", newUser);
+      return ApiService.post(`/api/newUser`, newUser);    
   },
   getUser(user) {
-    return apiClient.post("/api/login", user);
+    return ApiService.post(`/api/user`, user);
   },
   getTasksByDay(day) {
-    return apiClient.get(`api/tasks/${day}`);
-
+    return ApiService.get(`api/task/${day}`);
   },
-  setNewTask(task) {
-    if (bRunDBMock) {
-      return apiClient.post("/tasks/addNewTask", task);
-    }
+  addNewTask(task) {
+      return ApiService.post(`api/task`, task);
   },
   getTask(){
-    return apiClient.get(`/api/task/1`);
+    return ApiService.get(`/api/task/1`);
   }
 }

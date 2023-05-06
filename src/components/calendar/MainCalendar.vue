@@ -1,8 +1,7 @@
 <template>
-  <div class="calendar-page-content">
-    <div class="task-list">
+    <!-- <div class="task-list">
       <calendar-task :taskList="taskList"></calendar-task>
-    </div>
+    </div> -->
     <div class="main-calendar">
       <calendar-header :current-month="currentMonth" :first-day="firstDay" :locale="locale" @change="emitChangeMonth">
         <div slot="header-left">
@@ -20,21 +19,20 @@
 
         <div class="dates" ref="dates">
           <div class="dates-bg">
-            <div class="week-row" v-for="week in currentDates" v-bind:key="week">
-              <the-day class="day-cell" v-for="day in week" v-bind:key="day.data" v-model="currentDay" :class="{ today: day.isToday, 'not-cur-month': !day.isCurMonth }" :day="day" @selectDay="selectDay"> </the-day>
+            <div class="week-row" v-for="(week, idx) in currentDates" :key="idx" >
+              <the-day class="day-cell" v-for="(day, id) in week" :key="id" v-model="currentDay" :class="{ today: day.isToday, 'not-cur-month': !day.isCurMonth }" :day="day" @selectNewDay="selectNewDay"> </the-day>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
   
   <script>
 import moment from "moment";
-import CalendarTask from './CalendarTask.vue';
 import calendarHeader from "./CalendarHeader.vue";
 import TheDay from "./TheDay.vue";
+
 export default {
   name: "MainCalendar",
   props: {
@@ -53,7 +51,7 @@ export default {
   },
   data() {
     return {
-      currentMonth: moment().startOf("month"),
+      currentMonth: this.$moment().startOf("month"),
       currentDay: null,
       taskList: []
     };
@@ -63,8 +61,7 @@ export default {
   },
   components: {
     calendarHeader,
-    TheDay,
-    CalendarTask
+    TheDay
   },
   computed: {
     currentDates() {
@@ -99,31 +96,21 @@ export default {
       }
       return calendar;
     },
-    selectDay(tasks) {
-      this.taskList = tasks;
+    selectNewDay(day) {
+      console.log(day);
+      this.$emit("selectDay", day)
     }
   }
 };
 </script>
   
 <style lang="scss">
-.calendar-page-content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
+
 .task-list {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+
 }
 .main-calendar {
-  margin-right: 0rem;
-  margin-top: 6rem;
-  width: 50%;
-  align-items: flex-end;
-  justify-content: flex-end;
+
 }
 .comp-full-calendar {
   // font-family: "elvetica neue", tahoma, "hiragino sans gb";
@@ -139,6 +126,7 @@ export default {
 }
 .full-calendar-body {
   margin-top: 20px;
+  width: 45rem;
   .weeks {
     display: flex;
     border-top: 1px solid #e0e0e0;
@@ -286,5 +274,5 @@ export default {
     }
   }
 }
-}
+
 </style>

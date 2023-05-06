@@ -1,5 +1,10 @@
 import moment from 'moment';
 export default {
+    data() {
+        return {
+          accessToken: ""
+        };
+      },
     methods: {
         getMonthViewStartDate(date, firstDay) {
             firstDay = parseInt(firstDay);

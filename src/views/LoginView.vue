@@ -44,30 +44,46 @@ export default {
           email: this.email,
           password: this.password
         };
-        MockService.getUser(user)
-          .then((oResponse) => {
-            this.$store.state.userToken = oResponse.data.token;
-            this.$store.state.user = {
-              userLogin: oResponse.data.userLogin,
-              userEmail: oResponse.data.userEmail,
-              userLanguage: oResponse.data.userLanguage
-            };
-            this.$buefy.toast.open({
-              duration: 5000,
-              message: "Авторизация прошла успешно",
-              type: "is-success"
-            });
-            this.$router.push({
-              name: "/"
-            });
+        this.$store
+          .dispatch("secure/login", {
+            email: this.email,
+            password: this.password
+          })
+          .then(() => {
+            MockService.getUser(user)
+              .then((oResponse) => {
+                // this.setToken(oResponse.data.token);
+
+                this.$store.state.user = {
+                  userLogin: oResponse.data.userLogin,
+                  userEmail: oResponse.data.userEmail,
+                  userLanguage: oResponse.data.userLanguage
+                };
+                localStorage.setItem("language", oResponse.data.userLanguage.toLowerCase());
+                this.$buefy.toast.open({
+                  duration: 5000,
+                  message: "Авторизация прошла успешно",
+                  type: "is-success"
+                });
+                this.$router.push({
+                  name: "/"
+                });
+              })
+              .catch((oError) => {
+                this.$buefy.toast.open({
+                  duration: 5000,
+                  message: oError.response.data.message,
+                  type: "is-warning"
+                });
+              });
           })
           .catch((oError) => {
             this.$buefy.toast.open({
-              duration: 5000,
-              message: oError.response.data.message,
-              type: "is-warning"
-            });
-          });
+                  duration: 5000,
+                  message: oError.response.data.message,
+                  type: "is-warning"
+                });
+          })
       }
     },
     onSignUpClick() {

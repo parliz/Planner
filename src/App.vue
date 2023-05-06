@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <the-header />
-    <div>
+    <div class="main">
       <nav-bar class="navBar"/>
-      <div class="page-сontent">
+      <div class="page-content">
         <div class="view">
           <router-view />
         </div>
@@ -55,6 +55,16 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.main {
+  display: flex;
+  .page-content {
+    width: 100%;
+    .view {
+    height: 100%;
+    width: 100%;
+  }
+  }
+}
 .navBar {
   width: 15rem;
 }
@@ -63,6 +73,8 @@ export default {
     display: none;
   }
 }*/
+
+
 </style>
 
 

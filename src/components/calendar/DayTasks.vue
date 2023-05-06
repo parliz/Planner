@@ -1,15 +1,6 @@
 <template>
   <div>
-    <div v-if="taskList.length > 0" class="task-container">
-      <div class="add-task">
-        <label>{{ $t("calendar.task.addTask") }}</label>
-        <div class="add-task-content">
-        <b-input v-model="newTask" size="is-small"></b-input>
-        <button @click="addTask" id="add-btn">{{ $t("btn.add") }}</button>
-      </div>
-      </div>
-
-      <div class="line"></div>
+    <div class="task-container">
 
       <div class="main-task-list">
         <label>{{ $t("calendar.task.taskList") }}</label>
@@ -41,9 +32,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div v-else class="task-container">
-      <label>НЕТ ЗАДАЧ</label>
     </div>
   </div>
 </template>
@@ -89,18 +77,6 @@ button:hover {
   background: #ffffff;
 }
 
-#add-btn:hover {
-  border-radius: 14px;
-  border: 1px solid #ddd
-}
-
-#add-btn {
-  float: right;    
-  padding: 10px;
-  margin-top: 0;
-  border: 1px solid #ffffff;
-  background: #ffffff;
-}
 .task{
     display: flex;
     flex-direction: row;

@@ -14,7 +14,7 @@
   "login.btn.enter": "Войти",
   "signup.btn.enter": "Зарегистрироваться",
   "calendar.task.addTask": "ДОБАВИТЬ ЗАДАЧУ",
-  "calendar.task.taskList": "СПИСОК ЗАДАЧ",
+  "calendar.task.taskList": "ЗАДАЧИ НА ДЕНЬ",
   "calendar.task.closeTasks": "ЗАВЕРШЕННЫЕ ЗАДАЧИ",
 
   "btn.add": "Добавить"
