@@ -17,5 +17,22 @@
   "calendar.task.taskList": "ЗАДАЧИ НА ДЕНЬ",
   "calendar.task.closeTasks": "ЗАВЕРШЕННЫЕ ЗАДАЧИ",
 
-  "btn.add": "Добавить"
+  "project.label.create.newProject": "Создание проекта",
+  "project.label.create.projectName": "Введите название проекта",
+  "project.label.create.projectParticipants": "Добавьте участников",
+  "project.label.myProjects": "Мои проекты",
+  "project.label.status.inPlan": "Запланировано",
+  "project.label.status.inWork": "В работе",
+  "project.label.status.inFinish": "Завершено",
+  "project.label.create.task": "Создание задачи",
+  "project.task.priority.immediately": "Срочно",
+  "project.task.priority.important": "Важно",
+  "project.task.priority.notUrgent": "Не срочно",
+  
+
+
+  "btn.add": "Добавить",
+  "btn.create.project": "Создать новый проект",
+  "btn.create.task": "Добавить задачу",
+  "btn.create": "Создать"
 }

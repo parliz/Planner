@@ -46,6 +46,9 @@ export default {
   getUser(user) {
     return ApiService.post(`/api/user`, user);
   },
+  getUsers() {
+    return ApiService.get(`/api//users`)
+  },
   getTasksByDay(day) {
     return ApiService.get(`api/task/${day}`);
   },
@@ -60,5 +63,23 @@ export default {
   },
   deleteTaskFromCalendar(taskId) {
     return ApiService.delete(`/api/task/${taskId}`);
+  },
+  createProject(project) {
+    return ApiService.post(`/api/project/`, project);
+  },
+  getAllMyProjects() {
+    return ApiService.get(`/api/projects/`)
+  },
+  getProjectDetail(id) {
+    return ApiService.get(`/api/project/${id}`);
+  },
+  addProjectTask(projectId, task){
+    return ApiService.post(`/api/projectTask/${projectId}`, task);
+  },
+  changeTaskStatus(taskId, taskStatus) {
+    return ApiService.put(`/api/projectTask/${taskId}`, taskStatus);
+  },
+  getTaskDetail(taskId) {
+    return ApiService.get(`/api/projectTask/${taskId}`);
   }
 };

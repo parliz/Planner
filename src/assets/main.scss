@@ -1,161 +1,182 @@
 /* общая часть. начало */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;400&display=swap");
 @import "~bulma/sass/utilities/_all";
 
 // салатовый #9fff3e
 // голубой #00d7d9
 // оранжевый #ffa133
 
-$primary: #C1C1C1;
+$primary: #c1c1c1;
 $primary-light: findLightColor($primary);
 $primary-dark: findDarkColor($primary);
 $primary-invert: findColorInvert($primary);
 $primaryColor: #2c3e50;
-$lightColor: #C1C1C1;
-$accentColor: #F26C41;
+$lightColor: #c1c1c1;
+$accentColor: #f26c41;
 
 $custom-colors: null !default;
 
-$colors: mergeColorMaps(("primary": ($primary,
-                $primary-invert,
-                $primary-light,
-                $primary-dark,
-            ),
-            "light": (rgba($lightColor, 0.3),
-                findColorInvert($lightColor),
-                #FFFFFF,
-                $lightColor,
-            ),
-            "warning": ($accentColor,
-                findColorInvert($accentColor),
-                #FFFFFF,
-                $accentColor,
-            )),
-        $custom-colors);
+$colors: mergeColorMaps(
+  (
+    "primary": (
+      $primary,
+      $primary-invert,
+      $primary-light,
+      $primary-dark
+    ),
+    "light": (
+      rgba($lightColor, 0.3),
+      findColorInvert($lightColor),
+      #ffffff,
+      $lightColor
+    ),
+    "warning": (
+      $accentColor,
+      findColorInvert($accentColor),
+      #ffffff,
+      $accentColor
+    )
+  ),
+  $custom-colors
+);
 $link: $primary;
 $link-invert: $primary-invert;
 $link-focus-border: $primary;
 // $dropdown-mobile-breakpoint: 600px;
 
 .notices {
-    z-index: 9999 !important;
-    font-size: 0.825rem;
+  z-index: 9999 !important;
+  font-size: 0.825rem;
 
-    .toast {
-        border-radius: 4px !important;
-    }
+  .toast {
+    border-radius: 4px !important;
+  }
 }
 
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 
 * {
-    font-family: 'Montserrat', 'Helvetica' !important;
+  font-family: "Montserrat", "Helvetica" !important;
 }
 
 html,
 body {
-    overflow-y: hidden;
-    font-size: 18px;
-    color: #000000;
-    line-height: 1.3;
+  overflow-y: hidden;
+  font-size: 18px;
+  color: #000000;
+  line-height: 1.3;
 }
 
 .customMenu .panel {
-    height: 100vh;
-    width: 15rem;
-  }
+  height: 100vh;
+  width: 15rem;
+}
 
 .page-сontent {
-    width: 100%;
+  width: 100%;
 }
 
 h1 {
-    font-weight: normal;
-    font-size: 1rem;
+  font-weight: normal;
+  font-size: 1rem;
 }
 
 h2 {
-    font-size: 0.9rem;
-    font-weight: normal;
+  font-size: 0.9rem;
+  font-weight: normal;
 }
 
 h3 {
-    font-size: 0.825rem;
-    font-weight: normal;
+  font-size: 0.825rem;
+  font-weight: normal;
 }
 
 h4 {
-    font-size: 0.725rem;
-    font-weight: normal;
+  font-size: 0.725rem;
+  font-weight: normal;
 }
 
 p {
-    font-size: 0.725rem;
-    color: black;
+  font-size: 0.725rem;
+  color: black;
 }
 
 .button {
   color: #000000 !important;
 }
+
+.create-btn {
+  border-radius: 10px;
+  border: 1px solid #04aa6d;
+  background-color: white;
+  color: black;
+  padding: 10px 25px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background-color: #04aa6d;
+  color: white;
+}
 .login-page {
-    z-index: 8999;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background-color: #fff;
-    color: #fff;
+  z-index: 8999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: #fff;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .login-form {
+    padding: 1.5rem;
+    width: 20rem;
+    height: max-content;
+    box-shadow: 0px 0px 4px #2c3e5020;
+    border-radius: 30px;
+    background-color: #00d7d9;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-  
-    .login-form {
-      padding: 1.5rem;
-      width: 20rem;
-      height: max-content;
-      box-shadow: 0px 0px 4px #2c3e5020;
-      border-radius: 30px;
-      background-color: #00d7d9;
-      margin: 0 auto;
+    align-items: center;
+    gap: 3rem;
+
+    label {
+      font-size: 0.725rem;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 0.5rem;
+    }
+
+    img {
+      max-width: 75%;
+      margin-top: 2rem;
+    }
+
+    .login-content {
+      width: 100%;
       display: flex;
+      gap: 2rem;
       flex-direction: column;
-      align-items: center;
-      gap: 3rem;
-  
-      label {
-        font-size: 0.725rem;
-        color: #fff;
-      }
-  
+
       button {
-        margin-top: 0.5rem;
-      }
-  
-      img {
-        max-width: 75%;
-        margin-top: 2rem;
-      }
-  
-      .login-content {
-        width: 100%;
-        display: flex;
-        gap: 2rem;
-        flex-direction: column;
-  
-        button {
-          width: 100%;
-        }
-      }
-    }
-  }
-  
-  @media screen and (max-width: 600px) {
-    .login-page {
-      .login-form {
-        height: 100vh;
         width: 100%;
       }
     }
   }
+}
+
+@media screen and (max-width: 600px) {
+  .login-page {
+    .login-form {
+      height: 100vh;
+      width: 100%;
+    }
+  }
+}
