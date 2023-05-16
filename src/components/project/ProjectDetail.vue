@@ -5,13 +5,13 @@
       <div class="drag-and-drop">
         <div class="drop-area" @drop="dropTask('InPlan')" @dragover.prevent>
           <h2>{{ $t("project.label.status.inPlan") }}</h2>
-          <button type="is-success" inverted @click="addTask" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
           <div class="task-list">
             <div v-for="task in projectTasks.filter((task) => task.taskStatus === 'InPlan')" :key="task.taskId" class="task" draggable="true" @dragstart="dragStart(task)"  @dblclick="handleDoubleClick(task.taskId)">
               <div>{{ task.taskTitle }}</div>
               <div>{{ task.description }}</div>
             </div>
           </div>
+          <button type="is-success" inverted @click="addTask('InPlan')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
 
         <div class="drop-area" @drop="dropTask('InWork')" @dragover.prevent>
@@ -23,6 +23,7 @@
               <div>{{ task.description }}</div>
             </div>
           </div>
+          <button type="is-success" inverted @click="addTask('InWork')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
 
         <div class="drop-area" @drop="dropTask('Complete')" @dragover.prevent>
@@ -34,16 +35,17 @@
               <div>{{ task.description }}</div>
             </div>
           </div>
+          <button type="is-success" inverted @click="addTask('Complete')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
       </div>
     </div>
     <div class="task-detail" v-if="isTaskDetailShow">
         <b-button icon-right="fa-xmark" size="is-small" @click="isTaskDetailShow = false"></b-button>
-      <task-detail :task="taskDetail"></task-detail>
+      <task-detail :task="taskDetail" @handleDoubleClick="handleDoubleClick"></task-detail>
     </div>
     <the-popup ref="popup" :closable="true" height="25rem">
         
-      <create-task @closePopup="closePopup" :userList="participantsList"></create-task>
+      <create-task @closePopup="closePopup" :userList="participantsList" :status="taskStatus"></create-task>
     </the-popup>
   </div>
 </template>
@@ -57,31 +59,12 @@ export default {
   data() {
     return {
       project: null,
-      tasks: [
-        {
-          taskId: 1,
-          taskTitle: "Задача 1",
-          description: "Описание задачи 1",
-          taskStatus: "InPlan"
-        },
-        {
-            taskId: 2,
-          taskTitle: "Задача 2",
-          description: "Описание задачи 2",
-          taskStatus: "InWork"
-        },
-        {
-            taskId: 3,
-          taskTitle: "Задача 3",
-          description: "Описание задачи 3",
-          taskStatus: "Complete"
-        }
-      ],
       projectTasks: [],
       participantsList: [],
       dragTask: {},
       isTaskDetailShow: false,
-      taskDetail: null
+      taskDetail: null,
+      taskStatus: null
     };
   },
   created() {
@@ -103,8 +86,10 @@ export default {
           });
         });
     },
-    addTask() {
+    addTask(status) {
+      this.taskStatus = status;
       this.$refs.popup.open();
+      
     },
     dragStart(task) {
       this.dragTask = task;

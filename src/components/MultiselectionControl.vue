@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-taginput v-model="tags" :data="filteredTags" autocomplete :allow-new="allowNew" :open-on-focus="openOnFocus" field="userEmail" icon="label" placeholder="Добавьте участников" @typing="getFilteredTags"> </b-taginput>
+    <b-taginput v-model="tags" :data="filteredTags" autocomplete :allow-new="allowNew" :open-on-focus="true" field="userEmail" icon="label" placeholder="Добавьте участников" @typing="getFilteredTags"> </b-taginput>
   </div>
 </template>
 

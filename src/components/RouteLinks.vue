@@ -28,4 +28,7 @@ export default {
 .menu-list {
   
 }
+.menu {
+  position: fixed;
+}
 </style>

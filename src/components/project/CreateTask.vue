@@ -6,10 +6,6 @@
       <b-input size="is-small" v-model="taskTitle"></b-input>
     </div>
     <div>
-      <h4>Комментарий к задаче</h4>
-      <b-input size="is-small" v-model="taskDescription"></b-input>
-    </div>
-    <div>
       <h4>Выберите приоритет</h4>
       <b-dropdown v-model="taskPriority" aria-role="list">
         <template v-if="taskPriority === 1" #trigger>
@@ -54,6 +50,10 @@
       <b-autocomplete v-model="userEmail" placeholder="e.g. Anne" :keep-first="keepFirst" :open-on-focus="openOnFocus" :data="filteredDataObj" field="userEmail" @select="(option) => (taskResponsible = option.userId)" :clearable="clearable" size="is-small">
       </b-autocomplete>
     </div>
+    <div>
+      <h4>Комментарий к задаче</h4>
+      <b-input size="is-small" v-model="taskComment"></b-input>
+    </div>
     <button type="is-success" inverted class="create-btn" @click="createTask">{{ $t("btn.create") }}</button>
   </div>
 </template>
@@ -66,12 +66,16 @@ export default {
     userList: {
       type: Array,
       default: () => []
+    },
+    status: {
+      type: String
     }
   },
   data() {
     return {
       taskTitle: "",
-      taskDescription: "",
+      taskComment: "",
+      taskDate: "",
       taskResponsible: null,
       taskPriority: 1,
       userEmail: "",
@@ -82,11 +86,15 @@ export default {
   },
   methods: {
     createTask() {
-      const projectId = this.$route.params.projectId;
+      if (this.taskTitle) {
+        const projectId = this.$route.params.projectId;
       const task = {
         taskTitle: this.taskTitle,
         taskResponsible: this.taskResponsible,
-        taskPriority: this.taskPriority
+        taskPriority: this.taskPriority,
+        taskComment: this.taskComment,
+        taskDate: this.$moment().format("YYYY-MM-DD[T]HH:mm:ss.SSS[Z]"),
+        taskStatus: this.status
       };
       MockService.addProjectTask(projectId, task)
         .then((oResponse) => {
@@ -95,7 +103,7 @@ export default {
             message: oResponse.data.message,
             type: "is-success"
           });
-          this.taskDescription = "";
+          this.taskComment = "";
           this.taskResponsible = null;
           this.userEmail = "";
           this.$emit("closePopup");
@@ -108,6 +116,14 @@ export default {
           });
         })
         .finally(() => {});
+      } else {
+        this.$buefy.toast.open({
+            duration: 5000,
+            message: "Введите название задачи",
+            type: "is-warning"
+          });
+      }
+      
     }
   },
   computed: {

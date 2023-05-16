@@ -29,10 +29,12 @@
   "project.task.priority.important": "Важно",
   "project.task.priority.notUrgent": "Не срочно",
   
-
-
+  "list.label.create.newLists": "Создание списка",
+  "list.label.create.listName": "Введите название списка",
+  "list.label.create.listParticipants": "Дать доступ следующим лицам",
   "btn.add": "Добавить",
   "btn.create.project": "Создать новый проект",
   "btn.create.task": "Добавить задачу",
+  "btn.create.list": "Создать список",
   "btn.create": "Создать"
 }

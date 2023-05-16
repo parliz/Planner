@@ -79,7 +79,31 @@ export default {
   changeTaskStatus(taskId, taskStatus) {
     return ApiService.put(`/api/projectTask/${taskId}`, taskStatus);
   },
+  changeTaskPriority(taskId, taskPriority) {
+    return ApiService.put(`/api/projectTaskPriority/${taskId}`, taskPriority);
+  },
+  changeTaskResponsible(taskId, taskResponsible) {
+    return ApiService.put(`/api/projectTaskResponsible/${taskId}`, taskResponsible);
+  },
   getTaskDetail(taskId) {
     return ApiService.get(`/api/projectTask/${taskId}`);
+  },
+  getProjectParticipants(projectId) {
+    return ApiService.get(`/api/projectTaskParticipants/${projectId}`);
+  },
+  postNewComment(comment) {
+    return ApiService.post(`/api/projectTaskComment/`, comment);
+  },
+  createList(list) {
+    return ApiService.post(`/api/list/`, list);
+  },
+  getAllMyLists() {
+    return ApiService.get(`/api/lists/`)
+  },
+  createListItem(listItem) {
+    return ApiService.post(`/api/listItem/`, listItem)
+  },
+  getListDetails(listId) {
+    return ApiService.get(`/api/listItem/${listId}`)
   }
 };
