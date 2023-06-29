@@ -31,7 +31,7 @@ export default {
       } else {
         this.$buefy.toast.open({
           duration: 5000,
-          message: "Введите комментарий",
+          message: "Задача не может быть пустой",
           type: "is-warning"
         });
       }

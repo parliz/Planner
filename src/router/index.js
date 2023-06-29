@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 
@@ -17,11 +16,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
-  },
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
   },
   {
     path: '/calendar',

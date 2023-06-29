@@ -20,7 +20,8 @@
         <div class="dates" ref="dates">
           <div class="dates-bg">
             <div class="week-row" v-for="(week, idx) in currentDates" :key="idx" >
-              <the-day class="day-cell" v-for="(day, id) in week" :key="id" v-model="currentDay" :class="{ today: day.isToday, 'not-cur-month': !day.isCurMonth }" :day="day" @selectNewDay="selectNewDay"> </the-day>
+              <the-day class="day-cell" :class="{ today: day.isToday, 'not-cur-month': !day.isCurMonth }" v-for="(day, id) in week" :key="id" v-model="currentDay" :day="day" @selectNewDay="selectNewDay"> </the-day>
+              
             </div>
           </div>
         </div>
@@ -47,6 +48,9 @@ export default {
         return res >= 0 && res <= 6;
       },
       default: 0
+    },
+    selectedDay: {
+      type: String
     }
   },
   data() {
@@ -98,7 +102,8 @@ export default {
     },
     selectNewDay(day) {
       console.log(day);
-      this.$emit("selectDay", day)
+      this.$emit("selectDay", day);
+      
     }
   }
 };
@@ -106,8 +111,8 @@ export default {
   
 <style lang="scss">
 
-.task-list {
-
+.selected-day {
+  background-color: yellow;
 }
 .main-calendar {
 
@@ -155,7 +160,7 @@ export default {
           text-align: right;
         }
         &.today {
-          background-color: #fcf8e3;
+          background-color: #F36993;
         }
         &.not-cur-month {
           .day-number {

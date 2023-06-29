@@ -70,7 +70,7 @@ export default {
 .modal {
   height: 100%;
   z-index: 2000 !important;
-
+  
   .modal-close {
     display: none;
   }
@@ -93,6 +93,7 @@ export default {
   }
   .modal-card {
     overflow: visible !important;
+    padding: 1rem;
   }
   .modal-card-body {
     overflow: visible !important;
@@ -114,6 +115,8 @@ export default {
 .closeButton {
   position: absolute !important;
   right: 0;
+  top: 0;
+  border-radius: 8px !important;
   background-color: transparent;
   z-index: 3000;
 

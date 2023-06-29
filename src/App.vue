@@ -29,9 +29,18 @@ export default {
   },
   created() {
     // this.changeHeaderParam();
-    // MockService.getUser().then((oResponse) => {
-    //   this.$store.state.user = oResponse.data;
-    // });
+    MockService.getUser().then((oResponse) => {
+      this.changeLocale(oResponse.data.userLanguage.toLowerCase());
+      localStorage.setItem("language", oResponse.data.userLanguage.toLowerCase());
+      this.$store.state.user = {
+        userLogin: oResponse.data.userLogin,
+        userEmail: oResponse.data.userEmail,
+        userLanguage: oResponse.data.userLanguage
+      };
+    })
+    .catch((error) => {
+        this.errorMessage(error.response?.data.errorMessage);
+      });
   },
   watch: {
     $route() {
@@ -63,6 +72,7 @@ export default {
     height: 100%;
     width: 100%;
     padding: 2rem;
+    background-color: #f2f2f2;
   }
   }
 }

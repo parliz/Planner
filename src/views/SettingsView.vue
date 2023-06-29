@@ -1,64 +1,41 @@
 <template>
   <div class="settings-page">
-    <div class="client-settings">
-      <b-button size="is-small" type="is-primary" v-show="!isEditing" @click="onEdit">{{ $t("btn.edit") }}</b-button>
-      <b-button size="is-small" type="is-primary" v-show="isEditing" @click="onSaveSettings">{{ $t("btn.save") }}</b-button>
-      <b-button size="is-small" type="is-primary" v-show="isEditing" @click="onCancel">{{ $t("btn.cancel") }}</b-button>
+    <div class="user-settings">
+      <button type="is-success" inverted v-show="!isEditing" @click="onEdit" class="default-btn" style="">{{ $t("btn.edit") }}</button>
+      <button type="is-success" inverted  v-show="isEditing" @click="onSaveSettings" class="default-btn" style="">{{ $t("btn.save") }}</button>
+      <button type="is-success" inverted v-show="isEditing" @click="onCancel" class="default-btn" style="">{{ $t("btn.cancel") }}</button>
     </div>
-    <div class="client-info-block">
-      <div class="client-icon">
+    <div class="user-info-block">
+      <div class="user-icon">
         <font-awesome-icon icon="fa-solid fa-user" />
       </div>
-      <div class="client-form">
+      <div class="user-form">
         <div class="form-item">
-          <label>{{ $t("settings.label.fio") }}</label>
-          <div>{{ $store.state.user.name }}</div>
+          <label>{{ $t("settings.label.login") }}</label>
+          <div>{{ $store.state.user.userLogin }}</div>
         </div>
         <div class="form-item">
           <label>{{ $t("settings.label.email") }}</label>
-          <div>{{ $store.state.user.email }}</div>
-        </div>
-        <div class="form-item">
-          <label>{{ $t("settings.label.company") }}</label>
-          <div>{{ $store.state.user.company }}</div>
-        </div>
-        <div class="form-item">
-          <label>{{ $t("settings.label.phone") }}</label>
-          <div>{{ $store.state.user.phone }}</div>
-        </div>
-        <div class="form-item">
-          <label>{{ $t("settings.label.address") }}</label>
-          <div>{{ $store.state.user.address }}</div>
-        </div>
-        <div class="form-item">
-          <label>{{ $t("settings.label.telegram") }}</label>
           <div>
-            <span v-if="!isEditing">{{ $store.state.user.telegram }}</span>
+            <span v-if="!isEditing">{{ formatTextField($store.state.user.userEmail) }}</span>
             <div v-else>
-              <b-input v-model="userChanges.telegram" type="text" size="is-small" />
+              <b-input :class="{ invalid: !isEmailValid }" v-model="userChanges.userEmail" type="text" @blur="emailChange('blur')" @input="emailChange('input')" />
             </div>
           </div>
         </div>
         <div class="form-item margin-top">
           <label>{{ $t("settings.label.language") }}</label>
           <div>
-            <span v-if="!isEditing">{{ languages.find((oLang) => oLang.key === $store.state.user.language)?.text }}</span>
+            <span v-if="!isEditing">{{ languages.find((oLang) => oLang.key === $store.state.user.userLanguage)?.text }}</span>
             <div v-else>
               <div>
                 <b-field>
-                  <b-radio-button v-for="language in languages" :key="language.key" v-model="userChanges.language" :native-value="language.key" size="is-small" type=" is-primary">
+                  <b-radio-button v-for="language in languages" :key="language.key" v-model="userChanges.userLanguage" :native-value="language.key">
                     <span>{{ language.text }}</span>
                   </b-radio-button>
                 </b-field>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="form-item">
-          <label>{{ $t("settings.label.duplicateToEmail") }}</label>
-          <div>
-            <b-checkbox v-if="isEditing" v-model="userChanges.agreeToDuplicate" size="is-small" />
-            <div v-else>{{ !!userChanges.agreeToDuplicate ? $t("txt.yes") : $t("txt.no") }}</div>
           </div>
         </div>
       </div>
@@ -68,39 +45,73 @@
 
 <script>
 import MockService from "@/services/MockService";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       isEditing: false,
       defaultData: {},
       userChanges: {
-        telegram: this.$store.state.user.telegram,
-        language: this.$store.state.user.language,
-        agreeToDuplicate: this.$store.state.user.agreeToDuplicateNotifications
+        userEmail: this.$store.state.user.userEmail,
+        userLanguage: this.$store.state.user.userLanguage
       },
+      isEmailValid: true,
       languages: [
-        { key: "ru", text: "Русский" },
-        { key: "en", text: "English" }
+        { key: "RU", text: "Русский" },
+        { key: "EN", text: "English" }
       ]
     };
+  },
+  computed: {
+    userLanguageText() {
+      return this.languages.find((language) => language.key.toLowerCase() === this.userChanges.userLanguage.toLowerCase()).text;
+    },
+    ...mapState(["user"])
   },
   methods: {
     onEdit() {
       this.isEditing = true;
     },
     onSaveSettings() {
-      this.$i18n.locale = this.userChanges.language;
-      this.$store.state.user.language = this.userChanges.language;
-      this.$store.state.user.telegram = this.userChanges.telegram;
-      this.$store.state.user.agreeToDuplicateNotifications = this.userChanges.agreeToDuplicate;
-      this.isEditing = false;
-      this.updateHeader();
+      if (this.isEmailValid) {
+        this.isEditing = false;
+        MockService.setUserUpdate(this.userChanges)
+          .then(() => {
+            this.$store.state.user.userLanguage = this.userChanges.userLanguage;
+            this.$store.state.user.userEmail = this.userChanges.userEmail;
+
+            this.changeLocale(this.userChanges.userLanguage.toLowerCase());
+            localStorage.setItem("language", this.userChanges.userLanguage.toLowerCase());
+            this.updateHeader();
+          })
+          .catch((error) => {
+            this.errorMessage(error.response?.data.errorMessage);
+          });
+      } else {
+        this.errorMessage(this.$t("settings.warning.email"));
+      }
     },
     onCancel() {
-      this.userChanges.language = this.$store.state.user.language;
-      this.userChanges.telegram = this.$store.state.user.telegram;
-      this.userChanges.agreeToDuplicate = this.$store.state.user.agreeToDuplicateNotifications;
+      this.userChanges.userLanguage = this.$store.state.user.userLanguage;
+      this.userChanges.userEmail = this.$store.state.user.userEmail;
       this.isEditing = false;
+      this.isEmailValid = true;
+    },
+    emailChange(eventType) {
+      if (this.userChanges.userEmail === "") {
+        this.isEmailValid = false;
+        return;
+      }
+      if (/^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/.test(this.userChanges.userEmail)) {
+        this.isEmailValid = true;
+      } else {
+        if (eventType === "blur") {
+          this.isEmailValid = false;
+          this.errorMessage(this.$t("settings.warning.email"));
+        } else {
+          this.isEmailValid = true;
+        }
+      }
     }
   }
 };
@@ -113,7 +124,7 @@ export default {
   width: 100%;
   gap: 1rem;
 
-  .client-settings {
+  .user-settings {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -121,37 +132,53 @@ export default {
     justify-content: flex-end;
   }
 
-  .client-info-block {
+  .user-info-block {
     display: flex;
     flex-direction: row;
     width: 100%;
     align-items: center;
 
-    .form-item {
-      flex-direction: row;
-      align-items: center;
+    .user-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
 
-      & > label {
-        width: 10rem;
-        text-align: end;
+      .form-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+  
+        & > label {
+          width: 10rem;
+          text-align: end;
+        }
+      }
+  
+      .form-item > div {
+        margin-left: 0.5rem;
       }
     }
+    
 
-    .form-item > div {
-      margin-left: 0.5rem;
-    }
-
-    .client-icon {
-      width: 12rem;
+    .user-icon {
+      width: 12em;
+      height: 12em;
       text-align: center;
+      background-color: #ffffff;
       svg {
-        color: #2c3e50;
+        color: #F36993;
         height: 7rem;
       }
     }
-
-    select {
-    }
+  }
+  .b-radio.radio.button.is-selected {
+    background-color: #F36993;
+  }
+  .invalid {
+    outline-width: 3px;
+    outline-style: solid;
+    outline-color: #F79E4C;
+    border-radius: 4px;
   }
 }
 </style>

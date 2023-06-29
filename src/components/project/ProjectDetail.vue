@@ -1,21 +1,27 @@
 <template>
   <div :class="isTaskDetailShow ? 'project-with-details' : 'project'">
     <div class="project-tasks">
-      <h1>{{ project.projectName }}</h1>
+      <div style="display: flex; justify-content: space-between; margin-right: 1rem;">
+        <div style="display: flex; gap: 1rem">
+          <b-button type="is-primary is-small is-rounded" icon-right="fa-arrow-left" @click="navBack" />
+          <h1>{{ project.projectName }}</h1>
+        </div>
+        <button class="default-btn" is-primary is-small is-rounded @click="showParticipants">{{ $t("participants.list") }}</button>
+      </div>
       <div class="drag-and-drop">
         <div class="drop-area" @drop="dropTask('InPlan')" @dragover.prevent>
-          <h2>{{ $t("project.label.status.inPlan") }}</h2>
+          <h1>{{ $t("project.label.status.inPlan") }}</h1>
           <div class="task-list">
-            <div v-for="task in projectTasks.filter((task) => task.taskStatus === 'InPlan')" :key="task.taskId" class="task" draggable="true" @dragstart="dragStart(task)"  @dblclick="handleDoubleClick(task.taskId)">
+            <div v-for="task in projectTasks.filter((task) => task.taskStatus === 'InPlan')" :key="task.taskId" class="task" draggable="true" @dragstart="dragStart(task)" @dblclick="handleDoubleClick(task.taskId)">
               <div>{{ task.taskTitle }}</div>
               <div>{{ task.description }}</div>
             </div>
           </div>
-          <button type="is-success" inverted @click="addTask('InPlan')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
+          <button type="is-success" inverted @click="addTask('InPlan')" class="default-btn footer-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
 
         <div class="drop-area" @drop="dropTask('InWork')" @dragover.prevent>
-          <h2>{{ $t("project.label.status.inWork") }}</h2>
+          <h1>{{ $t("project.label.status.inWork") }}</h1>
 
           <div class="task-list">
             <div v-for="task in projectTasks.filter((task) => task.taskStatus === 'InWork')" :key="task.taskId" class="task" draggable="true" @dragstart="dragStart(task)" @dblclick="handleDoubleClick(task.taskId)">
@@ -23,11 +29,11 @@
               <div>{{ task.description }}</div>
             </div>
           </div>
-          <button type="is-success" inverted @click="addTask('InWork')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
+          <button type="is-success" inverted @click="addTask('InWork')" class="default-btn footer-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
 
         <div class="drop-area" @drop="dropTask('Complete')" @dragover.prevent>
-          <h2>{{ $t("project.label.status.inFinish") }}</h2>
+          <h1>{{ $t("project.label.status.inFinish") }}</h1>
 
           <div class="task-list">
             <div v-for="task in projectTasks.filter((task) => task.taskStatus === 'Complete')" :key="task.taskId" class="task" draggable="true" @dragstart="dragStart(task)" @dblclick="handleDoubleClick(task.taskId)">
@@ -35,17 +41,19 @@
               <div>{{ task.description }}</div>
             </div>
           </div>
-          <button type="is-success" inverted @click="addTask('Complete')" class="create-btn" style="">{{ $t("btn.create.task") }}</button>
+          <button type="is-success" inverted @click="addTask('Complete')" class="default-btn footer-btn" style="">{{ $t("btn.create.task") }}</button>
         </div>
       </div>
     </div>
     <div class="task-detail" v-if="isTaskDetailShow">
-        <b-button icon-right="fa-xmark" size="is-small" @click="isTaskDetailShow = false"></b-button>
+      <b-button icon-right="fa-xmark" size="is-small" style="position: absolute; right: 2rem" @click="isTaskDetailShow = false"></b-button>
       <task-detail :task="taskDetail" @handleDoubleClick="handleDoubleClick"></task-detail>
     </div>
-    <the-popup ref="popup" :closable="true" height="25rem">
-        
+    <the-popup ref="popup" :closable="true" height="auto">
       <create-task @closePopup="closePopup" :userList="participantsList" :status="taskStatus"></create-task>
+    </the-popup>
+    <the-popup ref="popupParticipants" :closable="true" height="auto">
+      <participants-list requestType="getProjectParticipants" :itemId="project.projectId" @closeParticipantPopup="closeParticipantPopup"></participants-list>
     </the-popup>
   </div>
 </template>
@@ -55,6 +63,7 @@ import MockService from "@/services/MockService";
 import ThePopup from "@/components/ThePopup.vue";
 import CreateTask from "@/components/project/CreateTask.vue";
 import TaskDetail from "@/components/project/TaskDetail.vue";
+import ParticipantsList from "@/components/ParticipantsList.vue";
 export default {
   data() {
     return {
@@ -89,7 +98,6 @@ export default {
     addTask(status) {
       this.taskStatus = status;
       this.$refs.popup.open();
-      
     },
     dragStart(task) {
       this.dragTask = task;
@@ -98,22 +106,21 @@ export default {
     dropTask(taskStatus) {
       if (this.dragTask.taskStatus === taskStatus) return;
 
-      MockService.changeTaskStatus(this.dragTask.taskId, {taskStatus: taskStatus}).then(() => {
-        this.getProjectInfo();
-      })
-      .finally(() => {
-        this.dragTask = {};
-      })
-    //   this.dragTask.taskStatus = taskStatus;
-
-      
+      MockService.changeTaskStatus(this.dragTask.taskId, { taskStatus: taskStatus, taskDate: this.$moment().format("YYYY-MM-DD[T]HH:mm:ss.SSS[Z]") })
+        .then(() => {
+          this.getProjectInfo();
+        })
+        .finally(() => {
+          this.dragTask = {};
+        });
+      //   this.dragTask.taskStatus = taskStatus;
     },
     handleDoubleClick(taskId) {
-        MockService.getTaskDetail(taskId)
+      MockService.getTaskDetail(taskId)
         .then((oResponse) => {
-            this.isTaskDetailShow = true;
+          this.isTaskDetailShow = true;
           this.taskDetail = oResponse.data;
-        //   (this.participantsList = oResponse.data.projectParticipants), (this.projectTasks = oResponse.data.projectTasks);
+          //   (this.participantsList = oResponse.data.projectParticipants), (this.projectTasks = oResponse.data.projectTasks);
         })
         .catch((oError) => {
           this.$buefy.toast.open({
@@ -126,36 +133,46 @@ export default {
     closePopup() {
       this.$refs.popup.close();
       this.getProjectInfo();
+    },
+    closeParticipantPopup() {
+      this.$refs.popupParticipants.close();
+      this.getProjectInfo();
+    },
+    navBack() {
+      this.$router.go(-1);
+    },
+    showParticipants() {
+      this.$refs.popupParticipants.open();
     }
   },
   components: {
     ThePopup,
     CreateTask,
-    TaskDetail
+    TaskDetail,
+    ParticipantsList
   }
 };
 </script>
 
 <style lang="scss">
 .project-with-details {
-    display: flex;
-    justify-content: space-between;
-    .task-detail {
-      background-color: #00d7d0;
-      width: 30rem;
-      
-      .task-detail-detail{
-        display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-      }
+  display: flex;
+  justify-content: space-between;
+  .task-detail {
+    background-color: #68acea;
+    width: 30rem;
+
+    .task-detail-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
+  }
 }
 .project {
-
 }
 .project-tasks {
-    width: 100%;
+  width: 100%;
 }
 .project-detail {
   display: flex;
@@ -166,6 +183,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  margin-top: 1.5rem;
 }
 
 .drop-area {
@@ -190,5 +208,10 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: move;
+}
+
+.footer-btn {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

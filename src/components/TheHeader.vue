@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .page-header {
     display: flex;
     flex-direction: row;
@@ -80,7 +80,7 @@ export default {
     place-items: center;
     position: relative;
     z-index: 1;
-    background: #b2f247;
+    background: #C8F57A;
   }
   
   @media screen and (max-width: 600px) and (orientation: portrait) {
@@ -98,14 +98,16 @@ export default {
   .user-header {
     display: flex;
     flex-direction: column;
+    position: fixed;
+    right: 2em;
   
     .header-menu-card-content {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       position: absolute;
-      top: 4rem;
-      right: 1rem;
+      top: 3rem;
+      right: 0rem;
       background-color: white;
       font-size: 0.8rem;
       box-shadow: 0px 10px 13px 0px rgba(0, 0, 0, 0.1);

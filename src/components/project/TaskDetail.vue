@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="task-detail-view">
-      <h2 class="task-detail-title">{{ task.taskTitle }}</h2>
+      <h1 class="task-detail-title">{{ task.taskTitle }}</h1>
 
       <div>
-        <h4>Приоритет</h4>
+        <h2>{{ $t("project.task.priority") }}</h2>
         <div class="dropdown">
           <button @click="toggleDropdown">{{ selected }}</button>
           <ul v-show="isDropdownOpen">
@@ -15,11 +15,17 @@
         </div>
       </div>
       <div>
-        <h4>Ответственный</h4>
+        <h2>{{ $t("project.task.date") }}</h2>
+        <div class="dropdown">
+          <h2>{{ formatterDate(task.taskPlanDate) }}</h2>
+        </div>
+      </div>
+      <div>
+        <h2>{{ $t("project.task.responsible") }}</h2>
 
         <b-autocomplete
           v-model="userEmail"
-          placeholder="e.g. Anne"
+          :placeholder="$t('login.label.login')"
           :keep-first="false"
           :open-on-focus="true"
           :data="filteredDataObj"
@@ -31,11 +37,19 @@
         </b-autocomplete>
       </div>
       <div>
-        <h4>Комментарий к задаче</h4>
-        <div v-for="(comment, index) in task.taskComment" :key="index">
-          <h2 >{{ comment.commentText }}</h2>
-        </div>
+        <h2>{{ $t("project.task.comments") }}</h2>
+        <div class="task-comments">
+          <div v-for="(comment, index) in task.taskComment" :key="index">
+            <div style="display: flex; justify-content: space-between;">         
+              <h4>{{ formatterDate(comment.commentDate) }}</h4>
+              <h4>{{ comment.commentAuthor }}</h4>
+            </div>
+            <h2>{{ comment.commentText }}</h2>
+            
+          </div>
         <b-input size="is-small" v-model="newTaskComment" v-on:keyup.native.enter="onPostNewComment"></b-input>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -185,8 +199,6 @@ ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 li {
@@ -204,5 +216,11 @@ button {
   border: none;
   border-radius: 0.2em;
   cursor: pointer;
+}
+.task-comments {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem
 }
 </style>

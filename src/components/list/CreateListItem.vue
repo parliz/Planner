@@ -2,20 +2,24 @@
     <div class="create-item">
       <!-- <b-label>{{ $t("list.label.create.newLists") }}</b-label> -->
       <div>
-        <h3>{{ $t("list.label.create.listItemName") }}</h3>
+        <h3>{{ $t("list.item.create.name") }}</h3>
         <b-input size="is-small" v-model="listItemTitle"></b-input>
       </div>
-      <div>
-        <h3>добавьте картинку/файл</h3>
+      <div class="image">
+        <div v-if="imageData">
+          <img class="item-img" :src="imageData">
+        </div>
+        <h3>{{ $t("list.item.file") }}</h3>
         <!-- <b-input size="is-small" v-model="listItemName"></b-input> -->
+        <input type="file" @change="onFileChanged($event)" accept="image/*">
       </div>
       <div>
-        <h3>Комментарий</h3>
-        <b-input size="is-small" v-model="listItemText"></b-input>
-        <!-- <multiselection-control :items="userList" @changeUserList="changeUserList"></multiselection-control> -->
+        <h3>{{ $t("list.item.comment") }}</h3>
+        <b-input size="is-small" v-model="listItemText" type="textarea" maxlength="1500"></b-input>
+        <button type="is-success" inverted class="default-btn" @click="createListItem">{{ $t("btn.create") }}</button>
       </div>
       <div>
-        <button type="is-success" inverted class="create-btn" @click="createListItem">{{ $t("btn.create") }}</button>
+        
       </div>
     </div>
   </template>
@@ -27,7 +31,8 @@
     data() {
       return {
         listItemTitle: "",
-        listItemText: ""
+        listItemText: "",
+        imageData: null
       };
     },
     created() {
@@ -39,7 +44,8 @@
           const listItem = {
             listId: this.$route.params.listId,
             listItemTitle: this.listItemTitle,
-            listItemText: this.listItemText
+            listItemText: this.listItemText,
+            listItemImg: this.imageData
           };
   
           MockService.createListItem(listItem)
@@ -51,6 +57,7 @@
               });
               this.listItemTitle = "";
               this.listItemText = "";
+              this.imageData = null;
               this.$emit("getListInfo");
             })
             .catch((oError) => {
@@ -62,22 +69,38 @@
             });
         }
       },
-      changeUserList(users) {
-        this.listParticipants = [];
-        users.map((user) => {
-          this.listParticipants.push(user.userId);
-        });
+      onFileChanged(event) {
+      let input = event.target
+      if (input.files && input.files[0]) {
+        let reader = new FileReader()
+        reader.onload = (e) => {
+          this.imageData = e.target.result
+        }
+        reader.readAsDataURL(input.files[0])
       }
+    }
     },
     components: {
-      // MultiselectionControl
     }
   };
   </script>
   
   <style>
 .create-item {
+  width: 100%;
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.item-img {
+  max-width: 200px;
+  max-height: 200px;
 }
 </style>
   

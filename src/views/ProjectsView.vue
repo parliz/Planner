@@ -1,9 +1,9 @@
 <template>
   <div id="projects">
-    <label>Проекты</label>
-    <button type="is-success" inverted @click="createProject" class="create-btn" style="">{{ $t("btn.create.project") }}</button>
-    <user-projects :projects="myProjects" @showProjectDetail="showProjectDetail"></user-projects>
-    <the-popup ref="popup" :closable="true" height="25rem">
+    <label>{{ $t("title.projects")}}</label>
+    <button type="is-success" inverted @click="createProject" class="default-btn" style="">{{ $t("btn.create.project") }}</button>
+    <user-projects :projects="myProjects" @showProjectDetail="showProjectDetail" @getMyProjects="getMyProjects"></user-projects>
+    <the-popup ref="popup" :closable="true" height="auto">
       <create-project @closePopup="closePopup"></create-project>
     </the-popup>
   </div>
@@ -42,6 +42,9 @@ export default {
         name: "projectDetail",
         params: { projectId: sId }
       });
+    },
+    updateProjects() {
+      this.getMyProjects();
     }
   },
   components: {
@@ -53,8 +56,9 @@ export default {
 </script>
 
 <style lang="scss">
-.create-btn {
+.default-btn {
   display: block;
   margin-left: auto;
+  margin-bottom: 1.2rem;
 }
 </style>

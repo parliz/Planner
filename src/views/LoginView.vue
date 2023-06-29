@@ -29,6 +29,10 @@ export default {
       isPasswordValid: true
     };
   },
+  created() {
+    this.changeLocale(localStorage.getItem("language") ? localStorage.getItem("language") : "ru");
+    // this.$store.dispatch("secure/logout");
+  },
   methods: {
     onLoginClick() {
       this.isEmailValid = this.email.length > 0;
@@ -66,7 +70,7 @@ export default {
                   type: "is-success"
                 });
                 this.$router.push({
-                  name: "/"
+                  name: "/calendar"
                 });
               })
               .catch((oError) => {

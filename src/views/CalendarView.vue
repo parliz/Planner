@@ -5,7 +5,7 @@
       <day-tasks :taskList="taskList" @updateTasks="getTaskListByDay"></day-tasks>
     </div>
     <div class="full-calendar">
-      <main-calendar @selectDay="selectDay"></main-calendar>
+      <main-calendar @selectDay="selectDay" :selectedDay="selectedDay"></main-calendar>
     </div>
       
     
@@ -87,9 +87,12 @@ export default {
     justify-content: flex-start;
     flex-direction: column;
     gap: 2rem;
+    width: 40%;
     
   .task-create {
     width: 20rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
   .button-test {

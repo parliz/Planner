@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <b-label>{{ $t("project.label.create.newProject") }}</b-label>
-    <div>
+  <div class="create-project-view">
+    <h3 class="project-label">{{ $t("project.label.create.newProject") }}</h3>
+    <div class="create-row">
       <h3>{{ $t("project.label.create.projectName") }}</h3>
-      <b-input size="is-small" v-model="projectName"></b-input>
+      <b-input v-model="projectName"></b-input>
     </div>
-    <div>
+    <div class="create-row">
       <h3>{{ $t("project.label.create.projectParticipants") }}</h3>
       <multiselection-control :items="userList" @changeUserList="changeUserList"></multiselection-control>
     </div>
     <div>
-      <button type="is-success" inverted class="create-btn" @click="createProject">{{ $t("btn.create") }}</button>
+      <button type="is-success" inverted class="default-btn" @click="createProject">{{ $t("btn.create") }}</button>
     </div>
   </div>
 </template>
@@ -44,7 +44,8 @@ export default {
       if (this.projectName.length > 0) {
         const project = {
           projectName: this.projectName,
-          projectParticipants: this.projectParticipants
+          projectParticipants: this.projectParticipants,
+          projectDate: this.$moment().format("YYYY-MM-DD[T]HH:mm:ss.SSS[Z]")
         };
 
         MockService.createProject(project)
@@ -80,4 +81,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.create-project-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .project-label {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .create-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .default-btn {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+</style>

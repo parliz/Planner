@@ -1,5 +1,5 @@
 <template>
-  <button id="lists" @click="getInfoByDay">
+  <button id="lists" @click="getInfoByDay" :class="isSelected ? 'selected-day' : ''">
     <p class="day-number">{{ day.monthDay }}</p>
   </button>
 </template>
@@ -13,6 +13,10 @@ export default {
   props: {
     day: {
       type: Object
+    },
+    isSelected: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -36,6 +40,9 @@ export default {
 </script>
   
   <style lang="scss" scoped>
+  .selected-day {
+    background-color: #F36993;
+  }
 </style>
   
   

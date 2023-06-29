@@ -1,9 +1,9 @@
 <template>
   <div id="projects">
-    <label>Списки</label>
-    <button type="is-success" inverted @click="createProject" class="create-btn" style="">{{ $t("btn.create.list") }}</button>
-    <user-lists :lists="myLists" @showListItem="showListItem"></user-lists>
-    <the-popup ref="popup" :closable="true" height="25rem">
+    <label>{{ $t("title.lists")}}</label>
+    <button type="is-success" inverted @click="createProject" class="default-btn" style="">{{ $t("btn.list.create") }}</button>
+    <user-lists :lists="myLists" @showListItem="showListItem" @updateLists="updateLists"></user-lists>
+    <the-popup ref="popup" :closable="true" height="auto">
       <create-list @closePopup="closePopup"></create-list>
     </the-popup>
   </div>
@@ -37,6 +37,9 @@ export default {
       this.$refs.popup.close();
       this.getMyLists();
     },
+    updateLists() {
+      this.getMyLists();
+    }, 
     showListItem(sId){
       this.$router.push({
         name: "ListItem",
@@ -53,7 +56,7 @@ export default {
 </script>
 
 <style lang="scss">
-.create-btn {
+.default-btn {
   display: block;
   margin-left: auto;
 }

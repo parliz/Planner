@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-taginput v-model="tags" :data="filteredTags" autocomplete :allow-new="allowNew" :open-on-focus="true" field="userEmail" icon="label" placeholder="Добавьте участников" @typing="getFilteredTags"> </b-taginput>
+    <b-taginput v-model="newSelectedItems" :data="filteredTags" icon="fa-tag" autocomplete :allow-new="allowNew" :open-on-focus="true"
+      field="userLogin" :placeholder="$t('project.label.create.projectParticipants')" @typing="getFilteredTags">
+    </b-taginput>
   </div>
 </template>
 
@@ -8,6 +10,10 @@
 export default {
   props: {
     items: {
+      type: Array,
+      default: () => []
+    },
+    selectedItems: {
       type: Array,
       default: () => []
     },
@@ -24,20 +30,20 @@ export default {
     selectedItems(newValue) {
       this.newSelectedItems = newValue;
     },
-    tags() {
-      this.$emit("changeUserList", this.tags);
+    newSelectedItems() {
+      this.$emit("changeUserList", this.newSelectedItems);
     }
   },
   data() {
     return {
-      filteredTags: null,
-      tags: null
+      filteredTags: null,      tags: null,
+      newSelectedItems: this.selectedItems
     };
   },
   methods: {
     getFilteredTags(text) {
       this.filteredTags = this.items.filter((option) => {
-        return option.userEmail.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+        return option.userLogin.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
       });
     }
   }
@@ -78,5 +84,16 @@ export default {
     height: 1.2rem;
     width: 1.2rem;
   }
+
+  .autocomplete>.control>.icon svg {
+    height: 2em;
+    width: 2em;
+    margin-left: 1rem;
+  }
+}
+
+.input>.icon svg {
+  width: 2rem;
+  height: 2rem;
 }
 </style>

@@ -101,14 +101,17 @@ export default {
 .user-header {
   display: flex;
   flex-direction: column;
+  position: fixed;
+  right: 2rem;
+
 
   .header-menu-card-content {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     position: absolute;
-    top: 4rem;
-    right: 1rem;
+    top: 3rem;
+    right: 0rem;
     background-color: white;
     font-size: 0.8rem;
     box-shadow: 0px 10px 13px 0px rgba(0, 0, 0, 0.1);
@@ -121,6 +124,10 @@ export default {
     }
   }
 }
+
+.user-header {
+  position: fixed;
+  right: 2rem;}
 
 .dropdown-divider {
   margin: 0.1rem 0;
